@@ -451,6 +451,7 @@ jobs:
       - run:
           name: install dependencies
           command: |
+            echo "$(pwd)"
             cd doc
             python -m venv venv
             . venv/bin/activate
@@ -461,6 +462,7 @@ jobs:
               pip uninstall -y plotly
               pip install -e ../packages/python/plotly
             fi
+            echo "$(pwd)"
             cd ..
       - run:
           name: Install orca
