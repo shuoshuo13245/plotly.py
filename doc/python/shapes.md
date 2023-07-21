@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.14.6
+      jupytext_version: 1.14.7
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -20,7 +20,7 @@ jupyter:
     name: python
     nbconvert_exporter: python
     pygments_lexer: ipython3
-    version: 3.10.10
+    version: 3.10.4
   plotly:
     description: How to make SVG shapes in python. Examples of lines, circle, rectangle,
       and path.
@@ -1013,6 +1013,85 @@ fig = go.Figure(
             label=dict(texttemplate="Change: %{dy:.2f}")
         ),
         title="Google Share Price 2018/2019",
+    ),
+)
+
+
+fig.show(
+    config={
+        "modeBarButtonsToAdd": [
+            "drawline",
+        ]
+    }
+)
+```
+
+#### Shapes in the Legend
+
+*New in 5.16*
+
+You can add a shape to the legend by setting `showlegend=True` on the shape. In this example, we add the second shape to the legend. The name that appears for the shape in the legend is the shape's `name` if it is provided. If no `name` is provided, the shape label's `text` is used. If neither is provided, the legend item appears as "shape \<shape number>". For example, "shape 1".
+
+```python
+import plotly.express as px
+
+df = px.data.stocks(indexed=True)
+
+fig = px.line(df)
+
+fig.add_shape(
+    type="rect",
+    x0="2018-09-24",
+    y0=0,
+    x1="2018-12-18",
+    y1=3,
+    line_width=0,
+    label=dict(text="Decline", textposition="top center", font=dict(size=20)),
+    fillcolor="green",
+    opacity=0.25,
+)
+
+fig.add_shape(
+    showlegend=True,
+    type="line",
+    x0=min(df.index),
+    y0=1,
+    x1=max(df.index),
+    y1=1,
+    line_width=3,
+    line_dash="dot",
+    label=dict(
+        text="Jan 1 2018 Baseline",
+        textposition="end",
+        font=dict(size=20, color="blue"),
+        yanchor="top",
+    ),
+)
+
+fig.show()
+```
+
+`newshape` also supports `showlegend`. In this example, each new line drawn on the graph appears in the legend.
+
+```python
+import plotly.graph_objects as go
+from plotly import data
+
+df = data.stocks()
+
+fig = go.Figure(
+    data=go.Scatter(
+        x=df.date,
+        y=df.AAPL,
+        name="Apple"
+    ),
+    layout=go.Layout(
+        yaxis=dict(title="Price in USD"),
+        newshape=dict(
+            showlegend=True,
+            label=dict(texttemplate="Change: %{dy:.2f}")
+        ),
+        title="Apple Share Price 2018/2019",
     ),
 )
 
